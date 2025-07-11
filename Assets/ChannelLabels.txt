@@ -1,0 +1,16 @@
+1 L-RecFem
+2 R-RecFem
+3 L-VasLat
+4 R-VasLat
+5 L-VasMed
+6 R-VasMed
+7 L-BicFem
+8 R-BicFem
+9 L-SemiTend
+10 R-SemiTend
+11 L-GlutMed
+12 R-GlutMed
+13 
+14 
+15 L-MedGas
+16 R-MedGas
