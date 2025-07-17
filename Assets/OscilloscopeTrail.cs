@@ -156,7 +156,8 @@ public class SimpleOscilloscope : MonoBehaviour
             string numberStr = currentObjectName.Substring(2);
             int channelNumber = int.Parse(numberStr);
 
-            newY = EMG_Delsys.lastSample[channelNumber - 1] * DataCollection.scaleEMG;
+            newY = EMG_Delsys.lastSample[channelNumber - 1] * DataCollection.scaleEMG *
+                        DataVisualization.EMGMultiplier;
             if (channelNumber - 1 == 14)
             {
                 //Debug.Log(newY);

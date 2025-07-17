@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 using UnityEngine.UI;
+using static UnityEditor.PlayerSettings;
 
 public class VisualizationTrail : MonoBehaviour
 {
@@ -36,6 +37,8 @@ public class VisualizationTrail : MonoBehaviour
     private float newY;
 
     private string currentObjectName;
+    private int sample = 0;
+    public static bool trialEndedFlag = false;
 
     void Start()
     {
@@ -56,7 +59,7 @@ public class VisualizationTrail : MonoBehaviour
         if (containerWidth <= 0)
         {
             containerWidth = 290f; // Your expected width
-            Debug.LogWarning("Container width was 0, using default 290");
+            UnityEngine.Debug.LogWarning("Container width was 0, using default 290");
         }
 
         currentX = 0f;
@@ -151,37 +154,44 @@ public class VisualizationTrail : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (DataVisualization.dataVisualizationFlag)
+        UnityEngine.Debug.Log(sample);
+        if (DataVisualization.dataVisualizationStopFlag)
+        { 
+            ResetVisualization();
+            return;
+        }
+        else
         {
-            if (!DataVisualization.dataVisualizationStopFlag)
+            if (DataVisualization.dataVisualizationFlag)
             {
-                if (DataVisualization.dataVisualizationPauseFlag)
+                if (!DataVisualization.dataVisualizationPauseFlag)
                 {
-                    PauseTrail();
-                }
-                else
-                {
-                    // Generate new Y position
+                    if (sample >= DataVisualization.trial_array.GetLength(0))
+                    {
+                        if (!trialEndedFlag)
+                        {
+                            UnityEngine.Debug.Log($"{gameObject.name} reached end of trial at sample {sample}");
+                            trialEndedFlag = true;
+                        }
+                        return;
+                    }
+
+                    // Visualization logic
                     string numberStr = currentObjectName.Substring(2);
                     int channelNumber = int.Parse(numberStr);
 
-                    newY = (DataVisualization.trial_array[DataVisualization.sample, channelNumber - 1] 
-                        - DataVisualization.EMG_means[channelNumber - 1]) * DataVisualization.scaleEMG;
+                    newY = (DataVisualization.trial_array[sample, channelNumber - 1]
+                        - DataVisualization.EMG_means[channelNumber - 1]) * DataVisualization.scaleEMG *
+                        DataVisualization.EMGMultiplier;
 
-                    // Apply Y bounding
                     newY = ApplyYBounding(newY);
 
                     if (!isScrolling)
                     {
-                        // Normal movement - move circle right
                         currentX += speed * Time.fixedDeltaTime;
-
                         circle.anchoredPosition = new Vector2(currentX, newY);
-
-                        // Add to trail
                         AddTrailPoint(currentX, newY);
 
-                        // Check if reached edge
                         if (currentX >= containerWidth / 2 - 5f)
                         {
                             isScrolling = true;
@@ -189,22 +199,18 @@ public class VisualizationTrail : MonoBehaviour
                     }
                     else
                     {
-                        // Scrolling mode - circle stays at right edge
                         circle.anchoredPosition = new Vector2(containerWidth / 2 - 5f, newY);
-
-                        // Add trail point at right edge
                         AddTrailPoint(containerWidth / 2 - 5f, newY);
-
-                        // Shift all trail points left
                         ShiftTrailLeft();
                     }
+                    sample = sample + 1;
+                }
+                else
+                {
+                    PauseTrail();
                 }
             }
-            else
-            {
-                ResetVisualization();
-            }
-        }
+        }       
     }
 
     void AddTrailPoint(float x, float y)
@@ -297,6 +303,7 @@ public class VisualizationTrail : MonoBehaviour
     }
     void ResetVisualization()
     {
+        sample = 0;
         currentX = 0f;
         isScrolling = false;
         trailIndex = 0;
@@ -306,24 +313,34 @@ public class VisualizationTrail : MonoBehaviour
         // Reset circle to start
         circle.anchoredPosition = new Vector2(currentX, 0);
 
-        // Clear trail
+
+        // Completely clear and reset trail
         if (trailPoints != null)
         {
+            UnityEngine.Debug.Log("Clearing " + trailPoints.Length + " trail points");
             for (int i = 0; i < trailPoints.Length; i++)
             {
-                trailPoints[i].anchoredPosition = new Vector2(-1000, 0); // Move off-screen
+                // Move way off-screen
+                trailPoints[i].anchoredPosition = new Vector2(-2000, -2000);
+
+                // Reset size and rotation to defaults
+                trailPoints[i].sizeDelta = new Vector2(2, trailThickness);
+                trailPoints[i].rotation = Quaternion.identity;
+
                 var image = trailPoints[i].GetComponent<UnityEngine.UI.Image>();
                 if (image != null)
                 {
-                    image.color = new Color(0.4f, 0.0f, 0.6f, 0f); // Fully transparent
+                    image.enabled = false;
                 }
             }
         }
+
+        UnityEngine.Debug.Log($"{gameObject.name} reset complete");
     }
 
     void PauseTrail()
     {
         // You can add additional visual feedback here (e.g., dim the trail or circle)
-        Debug.Log("Trail paused.");
+        UnityEngine.Debug.Log("Trail paused.");
     }
 }

@@ -18,6 +18,9 @@ public class DataCollection : MonoBehaviour
     public TMP_InputField TrialLabelInput, EMGScaleInput;
     public TMP_Text ConnectionStatus, ChannelLabelStatus;
     public static float scaleEMG;
+    public Slider EMGSlider;
+    public static float EMGMultiplier;
+    public TMP_Text emgValueText;
 
     //Delsys
     private EMG_Delsys EMGobject_Delsys;
@@ -52,6 +55,9 @@ public class DataCollection : MonoBehaviour
         TrialLabelInput.onValueChanged.AddListener(TrialLabelChanged);
         EMGScaleInput.onValueChanged.AddListener(EMGScaleChanged);
         ReturnToMainMenuButton.onClick.AddListener(ReturnToMainMenu);
+        EMGSlider.onValueChanged.AddListener(EMGMultiplierFunc);
+
+        EMGMultiplierFunc(EMGSlider.value);
 
         DisconnectDelsys.interactable = false;
         StartData.interactable = false;
@@ -60,6 +66,16 @@ public class DataCollection : MonoBehaviour
 
         scaleEMG = 1000000f;
         currentScale.text = "(current scale: " + scaleEMG + ")";
+    }
+
+    void EMGMultiplierFunc(float value)
+    {
+        EMGMultiplier = value;
+
+        if (emgValueText != null)
+        {
+            emgValueText.text = "Current value : " + EMGMultiplier.ToString("F2");
+        }
     }
 
     void ReturnToMainMenu()

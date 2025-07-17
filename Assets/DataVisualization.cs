@@ -18,6 +18,9 @@ public class DataVisualization : MonoBehaviour
     public TMP_InputField EMGScaleInput;
     public static float scaleEMG;
     private string selectedFile, data_path;
+    public Slider EMGSlider;
+    public static float EMGMultiplier;
+    public TMP_Text emgValueText;
 
     //Channel Labels
     private List<float> channelNumbers = new List<float>();
@@ -28,7 +31,6 @@ public class DataVisualization : MonoBehaviour
     //Data array
     public static float[,] trial_array;
     public static float[] EMG_means;
-    public static int sample = 0;
 
     //flags
     public static bool dataVisualizationFlag, dataVisualizationPauseFlag,
@@ -45,6 +47,9 @@ public class DataVisualization : MonoBehaviour
         PauseButton.onClick.AddListener(PauseEMG);
         EMGScaleInput.onValueChanged.AddListener(EMGScaleChanged);
         TrialsList.onValueChanged.AddListener(TrialSelected);
+        EMGSlider.onValueChanged.AddListener(EMGMultiplierFunc);
+
+        EMGMultiplierFunc(EMGSlider.value);
 
         //populate the file list
         data_path = "Assets/Data/";
@@ -57,7 +62,7 @@ public class DataVisualization : MonoBehaviour
         StopButton.interactable = false;
         PauseButton.interactable = false;
         
-        scaleEMG = 3000000f;
+        scaleEMG = 1000000f;
         currentScale.text = "(current scale: " + scaleEMG + ")";
     }
      // BUTTON FUNCTIONS
@@ -114,13 +119,12 @@ public class DataVisualization : MonoBehaviour
 
     void StopEMG()
     {
+        dataVisualizationFlag = false;
         dataVisualizationPauseFlag = false;
         dataVisualizationStopFlag = true;
         StartButton.interactable = true;
         StopButton.interactable = false;
         PauseButton.interactable = false;
-
-        sample = 0;
     }
 
     void PauseEMG()
@@ -154,6 +158,8 @@ public class DataVisualization : MonoBehaviour
             //Calc the means of each columns
             EMG_means = EMG_meanCalc(trial_array);
             Debug.Log(string.Join("\t", EMG_means));
+
+            Debug.Log("Length: " + trial_array.GetLength(0));
         }
      }
     void ReturnToMainMenu()
@@ -169,6 +175,16 @@ public class DataVisualization : MonoBehaviour
     {
         selectedFile = TrialsList.options[selectedIndex].text;
         Debug.Log("The selected file is: " + selectedFile);
+    }
+
+    void EMGMultiplierFunc(float value)
+    {
+        EMGMultiplier = value;
+
+        if (emgValueText != null)
+        {
+            emgValueText.text = "Current value : " + EMGMultiplier.ToString("F2");
+        }
     }
 
     // OTHER FUNCTIONS //
@@ -329,25 +345,17 @@ public class DataVisualization : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (dataVisualizationFlag)
+        if (!dataVisualizationFlag) return;
+
+        if (dataVisualizationStopFlag)
         {
-            if (dataVisualizationStopFlag)
-            {
-
-            }
-            else
-            {
-                if (dataVisualizationPauseFlag == false)
-                {
-                    sample = sample + 1;
-                }
-                else
-                {
-                    // do not update sample
-                }
-            }
-            
+            return;  // Don't update anything when stopped
         }
-
+        if (VisualizationTrail.trialEndedFlag)
+        {
+            StopEMG();
+            VisualizationTrail.trialEndedFlag = false;
+            Debug.Log("Trial ended. Stopping EMG visualizaiton");
+        }
     }
 }
