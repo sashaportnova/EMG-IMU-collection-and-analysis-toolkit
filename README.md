@@ -26,6 +26,7 @@ This Unity-based toolkit helps researchers collect, visualize, and analyze EMG a
 ## 🔧 How It Works
 
 The toolkit is organized into **three Unity scenes**: **Data Collection**, **Data Visualization**, and **Data Analysis**.
+<img width="914" height="513" alt="image" src="https://github.com/user-attachments/assets/01d972d9-cac0-4539-8c51-5ee0cb51eab8" />
 
 ### 1. Data Collection Scene
 
