@@ -1,6 +1,6 @@
 # EMG-IMU Data Collection & Analysis Toolkit (Unity + Delsys)
 
-This Unity-based toolkit helps researchers collect, visualize, and analyze EMG and IMU data using **Delsys** hardware. Built for flexibility, rapid prototyping, and academic research, this tool simplifies the process of working with high-channel-count EMG systems.
+This Unity-based toolkit helps researchers collect, visualize, and analyze EMG and IMU data using **Delsys** hardware. Built for flexibility, rapid prototyping, and academic research, this tool simplifies the process of working with high-channel EMG/IMU systems. This toolkit was developed with support and in collaboration with all the wonderful people at the [Neuromechanics & Mobility Lab](https://steelelab.me.uw.edu/) at the [University of Washington](https://www.washington.edu/), where we focus on designing and evaluating technologies to support individuals with disabilities under the guidance of [Dr. Kat Steele](https://www.me.washington.edu/facultyfinder/kat-m-steele). Our research spans biomechanics, assistive technology, and human-centered design to improve mobility and function across the lifespan.
 
 ## Features
 
