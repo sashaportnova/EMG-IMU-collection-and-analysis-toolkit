@@ -25,6 +25,10 @@ This Unity-based toolkit helps researchers collect, visualize, and analyze EMG a
 
 ## 🔧 How It Works
 
+### Delsys Connection
+
+For this Unity interface to work, you will need the Delsys 16-channel base and the Trigno Control Utility software. Before running the interface, ensure your base is connected and Control Utility is up and running.
+
 The toolkit is organized into **three Unity scenes**: **Data Collection**, **Data Visualization**, and **Data Analysis**.
 <img width="914" height="513" alt="image" src="https://github.com/user-attachments/assets/01d972d9-cac0-4539-8c51-5ee0cb51eab8" />
 
