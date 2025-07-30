@@ -23,6 +23,13 @@ This Unity-based toolkit helps researchers collect, visualize, and analyze EMG a
 
 ---
 
+## 📋 Table of Contents
+- [How It Works](#How-It-Works)  
+- [Notes](#Notes)  
+- [License](#License)  
+
+---
+
 ## 🔧 How It Works
 
 ### Delsys Connection
