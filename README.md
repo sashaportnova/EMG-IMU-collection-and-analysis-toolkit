@@ -30,7 +30,7 @@ This Unity-based toolkit helps researchers collect, visualize, and analyze EMG a
 
 ---
 
-## 🔧 How It Works
+## How It Works
 
 ### Delsys Connection
 
@@ -77,7 +77,7 @@ The toolkit is organized into **three Unity scenes**: **Data Collection**, **Dat
 
 ---
 
-## 💡 Notes
+## Notes
 
 - **Channel Layout**:  
   Channels are split visually by side — **odd-numbered** channels on the **left**, **even-numbered** on the **right** — to reflect bilateral sensor placement (e.g., left/right legs). Future versions may include alternate layout options.
@@ -105,7 +105,7 @@ If no name is provided, the channel will be displayed as unnamed. But the txt fi
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the [MIT License](LICENSE).
 
